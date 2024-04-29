@@ -1,3 +1,4 @@
 from services.hackerNews import *
 
-getTopStory()
+story = getTopStory()
+

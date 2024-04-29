@@ -5,3 +5,17 @@ databases:
     user: slacker_news_user
     plan: free
     region: oregon
+
+# Exported from Render on 2024-04-29T23:53:54Z
+services:
+  - type: cron
+    name: slacker-news-hacker-news
+    runtime: python
+    repo: https://github.com/posthello-code/slacker-news-server
+    plan: starter
+    envVars:
+      - fromGroup: slacker-news
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    schedule: "*/60 * * * *"
+version: "1"

@@ -1,5 +1,5 @@
 databases:
-  - name: slacker-news
+  - name: slacker-news-db
     databaseName: slacker_news
     user: slacker_news_user
     plan: free
@@ -14,6 +14,6 @@ services:
       - fromGroup: slacker-news
     region: oregon
     buildCommand: pip install -r requirements.txt
-    startCommand: python -m cron.hackerNews
+    startCommand: python -m cron.stories
     schedule: "*/60 * * * *"
 version: "1"

@@ -9,6 +9,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 def optimizeTextForCompletion(text):
     # trim long text and split into parts
     completionText = []
+    # this will limit truncate text longer than completionTextMaxParts * partLength
     completionTextMaxParts = 12
     partText = ""
     partLength = 16000

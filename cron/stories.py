@@ -7,6 +7,8 @@ session = init_postgres()
 
 print("getting story from hacker news")
 storySql = sqlTemplateFromTopStory(session)
+
+# send the text in a list to open AI so it doesn't exceed max tokens
 completionTextList = optimizeTextForCompletion(storySql.summary)
 storySummary = doCompletionWithList(
     completionTextList,

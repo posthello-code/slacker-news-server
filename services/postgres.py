@@ -40,6 +40,7 @@ class stories(Base):
     id = Column(
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
+    createdDate = Column(DateTime, unique=False, server_default=text("NOW()"))
     sourceId = Column(UUID, unique=False)
     title = Column(String, unique=False)
     summary = Column(Text, unique=False)
@@ -47,7 +48,6 @@ class stories(Base):
 
 # init func
 def init_postgres():
-    # DB Setup
     POSTGRES_DB_URL = os.getenv("POSTGRES_DB_URL")
     engine = create_engine(POSTGRES_DB_URL)
 

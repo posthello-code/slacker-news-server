@@ -53,5 +53,6 @@ def doCompletionWithList(completionTextList):
             ],
         )
         result += completion.choices[0].message.content
-        sleep(1)
+        # sleep to avoid rate limiting
+        sleep(0.02)
     return result

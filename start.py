@@ -40,5 +40,10 @@ def get_sources():
     return items
 
 
+@app.route("/")
+def root():
+    return "OK"
+
+
 if __name__ == "__main__":
     app.run(debug=False)

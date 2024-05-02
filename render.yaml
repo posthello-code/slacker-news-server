@@ -16,4 +16,15 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python -m cron.stories
     schedule: "*/60 * * * *"
+  - type: web
+    name: slacker-news-server
+    runtime: python
+    repo: https://github.com/posthello-code/slacker-news-server
+    plan: free
+    envVars:
+      - fromGroup: slacker-news
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn start:app
+    healthCheckPath: /
 version: "1"

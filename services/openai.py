@@ -42,17 +42,20 @@ def doCompletionWithList(completionTextList):
                 {
                     "role": "system",
                     "content": """
-                    You are a tech You are a tech news and blog 
-                    summarizer. You simplify technical jargon 
+                    You are a tech news and blog 
+                    writer. You simplify technical jargon 
                     so that the average technologist will 
-                    understand. Given an html doc, summarize 
-                    only the article text, ignore the code and 
-                    tags. If you can't provide a summary 
-                    respond with the character '.'""",
+                    understand. Given an html doc, use only 
+                    only the article text, ignore the 
+                    tags. If the provided text does not 
+                    provide enough useful text respond with 
+                    the character '.'""",
                 },
                 {"role": "user", "content": item},
             ],
         )
+        if completion.choices[0].message.content[0] == ".":
+            result = result[1:]
         result += completion.choices[0].message.content
         # sleep to avoid rate limiting
         sleep(0.02)

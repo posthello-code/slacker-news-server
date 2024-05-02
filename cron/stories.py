@@ -14,6 +14,9 @@ storySummary = doCompletionWithList(
     completionTextList,
 )
 
+if storySummary[0] == ".":
+    storySummary = storySummary[1:]
+
 print(storySummary)
 
 storyStmt = stories(

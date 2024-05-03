@@ -1,8 +1,8 @@
 from flask import Flask
+from flask_cors import CORS, cross_origin
 from flask_restful import Api
 from services.postgres import init_postgres, sources, stories
 from flask_restful import fields, marshal_with
-
 
 session = init_postgres()
 app = Flask(__name__)
@@ -10,6 +10,7 @@ api = Api(app)
 
 
 @app.route("/stories")
+@cross_origin()
 @marshal_with(
     {
         "id": fields.String,
@@ -46,4 +47,5 @@ def root():
 
 
 if __name__ == "__main__":
+    app.
     app.run(debug=False)

@@ -9,6 +9,7 @@ click==8.1.7
 distro==1.9.0
 Flask==3.0.3
 Flask-APScheduler==1.13.1
+Flask-Cors==4.0.0
 Flask-RESTful==0.3.10
 gunicorn==22.0.0
 h11==0.14.0

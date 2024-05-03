@@ -22,7 +22,10 @@ api = Api(app)
     }
 )
 def get_stories():
-    items = session.query(stories).order_by(desc("createdDate")).all()
+    try:
+        items = session.query(stories).order_by(desc("createdDate")).all()
+    except:
+        session.rollback()
     return items
 
 

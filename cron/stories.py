@@ -30,7 +30,10 @@ if len(checkDuplicates) == 0:
     print(storySummary)
 
     storyStmt = stories(
-        sourceId=storySql.sourceId, title=storySql.title, summary=storySummary
+        sourceId=storySql.sourceId,
+        title=storySql.title,
+        summary=storySummary,
+        sourceUri=storySql.sourceUri,
     )
 
     session.add(storyStmt)

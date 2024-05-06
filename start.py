@@ -19,6 +19,7 @@ api = Api(app)
         "sourceId": fields.String,
         "title": fields.String,
         "summary": fields.String,
+        "sourceUri": fields.String,
     }
 )
 def get_stories():

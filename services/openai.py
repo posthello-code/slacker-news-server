@@ -10,7 +10,7 @@ def optimizeTextForCompletion(text):
     # trim long text and split into parts
     completionText = []
     # this will limit truncate text longer than completionTextMaxParts * partLength
-    completionTextMaxParts = 8
+    completionTextMaxParts = 3
     partText = ""
     partLength = 16000
     for index, item in enumerate(text):
@@ -38,7 +38,7 @@ def doCompletionWithSystemMessage(completionTextList, systemMessage):
             + " completion progress"
         )
         completion = aiClient.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=[
                 {
                     "role": "system",

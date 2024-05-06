@@ -12,15 +12,22 @@ if len(checkDuplicates) == 0:
     storySummary = doCompletionWithSystemMessage(
         storySql.summary,
         """You are a tech news and blog 
-        writer. You will simplify technical jargon 
+        summarizer. You will simplify technical jargon 
         so that the average technologist will 
-        understand. Given an html doc, use only 
-        only the article text, ignore the 
-        tags. Summarize and shorten the content.
-        Separate similar sections into separate paragraphs 
-        If the provided text does not 
-        provide enough useful text respond with 
-        the character '.'""",
+        understand. 
+        
+        You will be provided html files 
+        and need to parse out the content of the article
+        and explain what it contains.
+        
+        If the page appears to be a github repo, state
+        simply what the repo appears to be for.
+        
+        Do not comment on the CSS of the page itself.
+        
+        Keep the length under 250 characters.
+        If the provided text is empty respond with the
+        character '.'""",
     )
 
 if len(checkDuplicates) == 0:

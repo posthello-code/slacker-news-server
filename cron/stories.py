@@ -1,5 +1,5 @@
 from services.hacker_news import *
-from services.openai import doCompletionWithList, optimizeTextForCompletion
+from services.openai import doCompletionWithSystemMessage
 from services.postgres import *
 
 session = init_postgres()
@@ -9,10 +9,18 @@ storySql = sqlTemplateFromTopStory(session)
 
 checkDuplicates = session.query(stories).where(stories.title == storySql.title).all()
 if len(checkDuplicates) == 0:
-    # send the text in a list to open AI so it doesn't exceed max tokens
-    completionTextList = optimizeTextForCompletion(storySql.summary)
-    storySummary = doCompletionWithList(
-        completionTextList,
+    storySummary = doCompletionWithSystemMessage(
+        storySql.summary,
+        """You are a tech news and blog 
+        writer. You will simplify technical jargon 
+        so that the average technologist will 
+        understand. Given an html doc, use only 
+        only the article text, ignore the 
+        tags. Summarize and shorten the content.
+        Separate similar sections into separate paragraphs 
+        If the provided text does not 
+        provide enough useful text respond with 
+        the character '.'""",
     )
 
 if len(checkDuplicates) == 0:

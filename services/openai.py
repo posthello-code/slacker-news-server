@@ -10,7 +10,7 @@ def optimizeTextForCompletion(text):
     # trim long text and split into parts
     completionText = []
     # this will limit truncate text longer than completionTextMaxParts * partLength
-    completionTextMaxParts = 12
+    completionTextMaxParts = 8
     partText = ""
     partLength = 16000
     for index, item in enumerate(text):
@@ -27,7 +27,8 @@ def optimizeTextForCompletion(text):
     return completionText
 
 
-def doCompletionWithList(completionTextList):
+def doCompletionWithSystemMessage(completionTextList, systemMessage):
+    completionTextList = optimizeTextForCompletion(completionTextList)
     result = ""
     for index, item in enumerate(completionTextList):
         print(
@@ -41,15 +42,7 @@ def doCompletionWithList(completionTextList):
             messages=[
                 {
                     "role": "system",
-                    "content": """
-                    You are a tech news and blog 
-                    writer. You simplify technical jargon 
-                    so that the average technologist will 
-                    understand. Given an html doc, use only 
-                    only the article text, ignore the 
-                    tags. If the provided text does not 
-                    provide enough useful text respond with 
-                    the character '.'""",
+                    "content": systemMessage,
                 },
                 {"role": "user", "content": item},
             ],

@@ -62,4 +62,5 @@ def sqlTemplateFromTopStory(
         sourceId=topStorySourceSql.id,
         title=topStoryTitle,
         summary=linkedSiteSourceSql.content,
+        sourceUri=topStoryResponse.url,
     )

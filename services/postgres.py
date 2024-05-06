@@ -44,6 +44,7 @@ class stories(Base):
     sourceId = Column(UUID, unique=False)
     title = Column(String, unique=False)
     summary = Column(Text, unique=False)
+    sourceUri = Column(String, unique=False)
 
 
 # init func

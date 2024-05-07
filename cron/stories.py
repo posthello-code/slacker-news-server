@@ -1,6 +1,7 @@
 from services.hacker_news import *
 from services.openai import doCompletionWithSystemMessage
 from services.postgres import *
+from services.utils import *
 
 session = init_postgres()
 
@@ -9,6 +10,7 @@ storySql = sqlTemplateFromTopStory(session)
 
 checkDuplicates = session.query(stories).where(stories.title == storySql.title).all()
 if len(checkDuplicates) == 0:
+    storySql.summary = remove_html_tags(storySql.summary)
     storySummary = doCompletionWithSystemMessage(
         storySql.summary,
         """You are a tech news and blog 
@@ -16,14 +18,14 @@ if len(checkDuplicates) == 0:
         so that the average technologist will 
         understand. 
         
-        You will be provided html files 
-        and need to parse out the content of the article
-        and explain what it contains.
+        You will be proided text from a website, you 
+        need to explain what it contains.
         
         If the page appears to be a github repo, state
         simply what the repo appears to be for.
         
-        Do not comment on the CSS of the page itself.
+        If the text appears to be CSS code, respond with the
+        character '.'.
         
         Keep the length under 250 characters.
         If the provided text is empty respond with the

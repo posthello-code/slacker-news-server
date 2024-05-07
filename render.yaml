@@ -18,6 +18,8 @@ services:
     schedule: "*/60 * * * *"
   - type: web
     name: slacker-news-server
+    previewPlan: free
+    previewsExpireAfterDays: 1
     runtime: python
     repo: https://github.com/posthello-code/slacker-news-server
     plan: free

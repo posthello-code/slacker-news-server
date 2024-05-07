@@ -1,3 +1,4 @@
+previewsExpireAfterDays: 1
 databases:
   - name: slacker-news-db
     databaseName: slacker_news
@@ -19,7 +20,6 @@ services:
   - type: web
     name: slacker-news-server
     previewPlan: free
-    previewsExpireAfterDays: 1
     runtime: python
     repo: https://github.com/posthello-code/slacker-news-server
     plan: free

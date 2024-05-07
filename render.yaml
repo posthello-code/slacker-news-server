@@ -1,5 +1,3 @@
-previewsEnabled: true
-previewsExpireAfterDays: 1
 databases:
   - name: slacker-news-db
     databaseName: slacker_news
@@ -22,7 +20,7 @@ services:
     name: slacker-news-server
     runtime: python
     repo: https://github.com/posthello-code/slacker-news-server
-    plan: free
+    plan: starter
     envVars:
       - fromGroup: slacker-news
     region: oregon

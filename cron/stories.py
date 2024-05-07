@@ -10,7 +10,8 @@ storySql = sqlTemplateFromTopStory(session)
 
 checkDuplicates = session.query(stories).where(stories.title == storySql.title).all()
 if len(checkDuplicates) == 0:
-    storySql.summary = remove_html_tags(storySql.summary)
+    storySql.summary = clean_html(storySql.summary)
+    print(storySql.summary)
     storySummary = doCompletionWithSystemMessage(
         storySql.summary,
         """You are a tech news and blog 
@@ -23,9 +24,13 @@ if len(checkDuplicates) == 0:
         
         If the page appears to be a github repo, state
         simply what the repo appears to be for.
+    
+        If the text appears to be CSS, or javascript code, 
+        respond with the character '.'.
         
-        If the text appears to be CSS code, respond with the
-        character '.'.
+        If the text appears to be related to the style or
+        theme, format or hosting of the website respond 
+        with the character '.'.
         
         Keep the length under 250 characters.
         If the provided text is empty respond with the

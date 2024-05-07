@@ -1,6 +1,10 @@
 import re
 
 
-def remove_html_tags(text):
+def clean_html(text):
     clean = re.compile("<.*?>")
-    return re.sub(clean, "", text)
+    tagsRemovedText = re.sub(clean, "", text)
+    clean = re.compile("{.*?}", re.DOTALL)
+    cssRemovedText = re.sub(clean, "", tagsRemovedText)
+    clean = re.compile(r"\s{2,}")
+    return re.sub(clean, "", cssRemovedText)

@@ -27,7 +27,7 @@ def optimizeTextForCompletion(text):
     return completionText
 
 
-def doCompletionWithSystemMessage(completionTextList, systemMessage):
+def doCompletionWithSystemMessage(completionTextList: list[str], systemMessage: str):
     completionTextList = optimizeTextForCompletion(completionTextList)
     result = ""
     for index, item in enumerate(completionTextList):

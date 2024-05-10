@@ -1,7 +1,7 @@
-from services.hacker_news import *
+from services.hacker_news import sqlTemplateFromTopStory, stories
 from services.openai import doCompletionWithSystemMessage
-from services.postgres import *
-from services.utils import *
+from services.postgres import init_postgres
+from services.utils import clean_html
 
 session = init_postgres()
 

@@ -23,10 +23,16 @@ def sqlTemplateFromTopStory(
 ):
     topStoryResponse = request_top_story()
     topStoryContent = json.dumps(topStoryResponse.text)
+
     try:
+        # handle when the story is an external website
         topStoryUri = json.loads(topStoryResponse.text)["url"]
     except:
-        topStoryUri = topStoryResponse.url
+        # handle when the story internal to hacker news
+        topStoryId = json.loads(topStoryResponse.text)["id"]
+        topStoryUri = "https://news.ycombinator.com/item?id=" + str(topStoryId)
+
+    print(topStoryUri)
 
     topStoryTitle = json.loads(topStoryResponse.text)["title"]
     # model for story to insert into db

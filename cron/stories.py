@@ -37,7 +37,6 @@ if len(checkDuplicates) == 0:
         character '.'""",
     )
 
-if len(checkDuplicates) == 0:
     if storySummary[0] == ".":
         storySummary = storySummary[1:]
 

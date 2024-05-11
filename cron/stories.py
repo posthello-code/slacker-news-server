@@ -42,15 +42,16 @@ if len(checkDuplicates) == 0:
 
     print(storySummary)
 
-    storyStmt = stories(
-        sourceId=storySql.sourceId,
-        title=storySql.title,
-        summary=storySummary,
-        sourceUri=storySql.sourceUri,
-    )
+    if len(storySummary) > 0:
+        storyStmt = stories(
+            sourceId=storySql.sourceId,
+            title=storySql.title,
+            summary=storySummary,
+            sourceUri=storySql.sourceUri,
+        )
 
-    session.add(storyStmt)
-    session.commit()
+        session.add(storyStmt)
+        session.commit()
 else:
     print("duplicate story")
 

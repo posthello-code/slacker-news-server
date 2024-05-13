@@ -32,6 +32,9 @@ if len(checkDuplicates) == 0:
         theme, format or hosting of the website respond 
         with the character '.'.
         
+        If the page is forbidden due to 403 error respond 
+        with the character '.'
+        
         Keep the length under 250 characters.
         If the provided text is empty respond with the
         character '.'""",

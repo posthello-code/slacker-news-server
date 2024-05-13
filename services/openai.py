@@ -7,15 +7,16 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 def optimizeTextForCompletion(text):
-    # trim long text and split into parts
+    # function will split text into an array strings
+    # and trunactes text that exceeds completionTextMaxParts * partLength
     completionText = []
-    # this will limit truncate text longer than completionTextMaxParts * partLength
     completionTextMaxParts = 3
-    partText = ""
     partLength = 16000
+    partText = ""
     for index, item in enumerate(text):
         partText += item
         if len(text) < partLength and index == len(text) - 1:
+            # exit on the last part
             completionText.append(partText)
             break
         if (index % partLength) == 0:
@@ -38,7 +39,7 @@ def doCompletionWithSystemMessage(completionTextList: list[str], systemMessage: 
             + " completion progress"
         )
         completion = aiClient.chat.completions.create(
-            model="gpt-4-turbo",
+            model="gpt-4o",
             messages=[
                 {
                     "role": "system",

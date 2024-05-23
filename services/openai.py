@@ -4,6 +4,9 @@ from openai import OpenAI
 
 aiClient = OpenAI()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL") or "gpt-4o"
+
+print("Selected GPT model: " + OPENAI_MODEL)
 
 
 def optimizeTextForCompletion(text):
@@ -39,7 +42,7 @@ def doCompletionWithSystemMessage(completionTextList: list[str], systemMessage: 
             + " completion progress"
         )
         completion = aiClient.chat.completions.create(
-            model="gpt-4o",
+            model=OPENAI_MODEL,
             messages=[
                 {
                     "role": "system",
@@ -48,9 +51,11 @@ def doCompletionWithSystemMessage(completionTextList: list[str], systemMessage: 
                 {"role": "user", "content": item},
             ],
         )
-        if completion.choices[0].message.content[0] == ".":
-            result = result[1:]
-        result += completion.choices[0].message.content
-        # sleep to avoid rate limiting
-        sleep(0.02)
+        try:
+            if completion.choices[0].message.content != ".":
+                result += completion.choices[0].message.content
+            # sleep to avoid rate limiting
+            sleep(0.02)
+        except:
+            print("no summary")
     return result

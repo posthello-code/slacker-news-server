@@ -1,7 +1,9 @@
+from alembic import config as alembic_config
 from sqlalchemy import (
     UUID,
     Column,
     DateTime,
+    Integer,
     MetaData,
     String,
     create_engine,
@@ -33,6 +35,7 @@ class sources(Base):
     sourceUri = Column(String, unique=False)
     dataFormat = Column(String, unique=False)
     content = Column(Text, unique=False)
+    externalId = Column(Integer, unique=False)
 
 
 class stories(Base):
@@ -69,6 +72,14 @@ def init_postgres():
         print("Initializing table")
         Base.metadata.create_all(engine)
         print_all_tables(engine)
+
+    alembic_args = [
+        "--raiseerr",  # Optional: Raise exceptions for errors
+        "upgrade",
+        "head",
+    ]
+
+    alembic_config.main(argv=alembic_args)
 
     Session = sessionmaker(bind=engine)
     session = Session()

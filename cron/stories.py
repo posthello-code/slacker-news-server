@@ -1,4 +1,4 @@
-from services.hacker_news import sqlTemplateFromTopStory, stories
+from services.hacker_news import sql_template_from_top_story, stories
 from services.openai import doCompletionWithSystemMessage
 from services.postgres import init_postgres
 from services.utils import clean_html
@@ -6,7 +6,7 @@ from services.utils import clean_html
 session = init_postgres()
 
 print("getting story from hacker news")
-storySql = sqlTemplateFromTopStory(session)
+storySql = sql_template_from_top_story(session)
 
 checkDuplicates = session.query(stories).where(stories.title == storySql.title).all()
 if len(checkDuplicates) == 0:
@@ -62,3 +62,4 @@ try:
     session.close()
 except:
     print("already closed")
+    raise

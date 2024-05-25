@@ -9,66 +9,66 @@ def request_top_story():
         "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
     )
 
-    topStories = eval(response.text)
+    top_stories = eval(response.text)
     response = requests.get(
         "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty"
-        % topStories[3]
+        % top_stories[0]
     )
 
     return response
 
 
-def sqlTemplateFromTopStory(
+def sql_template_from_top_story(
     session,
 ):
-    topStoryResponse = request_top_story()
-    topStoryContent = json.dumps(topStoryResponse.text)
-    topStoryId = json.loads(topStoryResponse.text)["id"]
+    top_story_response = request_top_story()
+    top_story_content = json.dumps(top_story_response.text)
+    top_story_id = json.loads(top_story_response.text)["id"]
 
     try:
         # handle when the story is an external website
-        topStoryUri = json.loads(topStoryResponse.text)["url"]
+        top_story_uri = json.loads(top_story_response.text)["url"]
     except:
         # handle when the story internal to hacker news
-        topStoryUri = "https://news.ycombinator.com/item?id=" + str(topStoryId)
+        top_story_uri = "https://news.ycombinator.com/item?id=" + str(top_story_id)
 
-    print(topStoryUri)
+    print(top_story_uri)
 
-    topStoryTitle = json.loads(topStoryResponse.text)["title"]
+    top_story_title = json.loads(top_story_response.text)["title"]
     # model for story to insert into db
-    topStorySourceSql = sources(
+    top_story_source_sql = sources(
         source="hacker-news-story",
         sourceMethod="http",
-        sourceUri=topStoryResponse.url,
+        sourceUri=top_story_response.url,
         dataFormat="json",
-        content=topStoryContent,
-        externalId=topStoryId,
+        content=top_story_content,
+        externalId=top_story_id,
     )
 
     # save to postgres
-    session.add(topStorySourceSql)
+    session.add(top_story_source_sql)
     session.commit()
 
     # get the page content
-    topStorySiteHtml = requests.get(topStoryUri)
+    top_story_site_html = requests.get(top_story_uri)
 
     # model for story to insert into db
-    linkedSiteSourceSql = sources(
+    linked_site_source_sql = sources(
         source="hacker-news-story-linked-site",
         sourceMethod="http",
-        sourceUri=topStoryUri,
+        sourceUri=top_story_uri,
         dataFormat="html",
-        content=topStorySiteHtml.text,
-        externalId=topStoryId,
+        content=top_story_site_html.text,
+        externalId=top_story_id,
     )
 
     # save to postgres
-    session.add(linkedSiteSourceSql)
+    session.add(linked_site_source_sql)
     session.commit()
 
     return stories(
-        sourceId=topStorySourceSql.id,
-        title=topStoryTitle,
-        summary=linkedSiteSourceSql.content,
-        sourceUri=topStoryUri,
+        sourceId=top_story_source_sql.id,
+        title=top_story_title,
+        summary=linked_site_source_sql.content,
+        sourceUri=top_story_uri,
     )

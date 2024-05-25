@@ -5,6 +5,16 @@ from services.utils import clean_html
 
 session = init_postgres()
 
+
+def close_session():
+    try:
+        session.close()
+    except:
+        print("already closed")
+
+    exit(0)
+
+
 print("getting story from hacker news")
 storySql = sql_template_from_top_story(session)
 
@@ -40,6 +50,10 @@ if len(checkDuplicates) == 0:
         character '.'""",
     )
 
+    if len(storySummary) == 0:
+        print("no summary")
+        close_session()
+
     if storySummary[0] == ".":
         storySummary = storySummary[1:]
 
@@ -58,8 +72,4 @@ if len(checkDuplicates) == 0:
 else:
     print("duplicate story")
 
-try:
-    session.close()
-except:
-    print("already closed")
-    raise
+close_session()

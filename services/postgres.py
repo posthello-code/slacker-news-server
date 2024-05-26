@@ -24,7 +24,7 @@ metadata_obj = MetaData()
 Base = declarative_base()
 
 
-class sources(Base):
+class Source(Base):
     __tablename__ = "sources"
     id = Column(
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
@@ -38,7 +38,7 @@ class sources(Base):
     externalId = Column(Integer, unique=False)
 
 
-class stories(Base):
+class Story(Base):
     __tablename__ = "stories"
     id = Column(
         UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
@@ -81,6 +81,14 @@ def init_postgres():
 
     alembic_config.main(argv=alembic_args)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = sessionmaker(bind=engine)()
     return session
+
+
+def close_session(session):
+    try:
+        session.close()
+    except:
+        print("already closed")
+
+    exit(0)

@@ -1,7 +1,7 @@
 import requests
 import json
 
-from services.postgres import sources, stories
+from services.postgres import Source, Story
 
 
 def request_top_story():
@@ -36,7 +36,7 @@ def sql_template_from_top_story(
 
     top_story_title = json.loads(top_story_response.text)["title"]
     # model for story to insert into db
-    top_story_source_sql = sources(
+    top_story_source_sql = Source(
         source="hacker-news-story",
         sourceMethod="http",
         sourceUri=top_story_response.url,
@@ -53,7 +53,7 @@ def sql_template_from_top_story(
     top_story_site_html = requests.get(top_story_uri)
 
     # model for story to insert into db
-    linked_site_source_sql = sources(
+    linked_site_source_sql = Source(
         source="hacker-news-story-linked-site",
         sourceMethod="http",
         sourceUri=top_story_uri,
@@ -64,9 +64,14 @@ def sql_template_from_top_story(
 
     # save to postgres
     session.add(linked_site_source_sql)
-    session.commit()
 
-    return stories(
+    try:
+        session.commit()
+    except ValueError:
+        print("There was a problem with the source")
+        exit(0)
+
+    return Story(
         sourceId=top_story_source_sql.id,
         title=top_story_title,
         summary=linked_site_source_sql.content,

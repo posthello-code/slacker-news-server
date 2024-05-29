@@ -1,3 +1,4 @@
+from time import sleep
 import requests
 import json
 
@@ -18,19 +19,39 @@ def request_top_story():
     return response
 
 
+def request_top_story_comments(id):
+    response = requests.get(
+        "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty" % id
+    )
+
+    comment_ids = json.loads(response.text)["kids"]
+    comments = []
+    for item in comment_ids:
+        comment = requests.get(
+            "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty" % item
+        )
+        comments.append(json.loads(comment.text))
+        sleep(0.2)
+
+    return comments
+
+
+# Fetches the story,
 def sql_template_from_top_story(
     session,
 ):
     top_story_response = request_top_story()
-    top_story_content = json.dumps(top_story_response.text)
+    top_story_content = top_story_response.text
     top_story_id = json.loads(top_story_response.text)["id"]
+    top_story_uri = "https://news.ycombinator.com/item?id=" + str(top_story_id)
+    top_story_comments = json.dumps(request_top_story_comments(top_story_id))
 
     try:
         # handle when the story is an external website
         top_story_uri = json.loads(top_story_response.text)["url"]
     except:
         # handle when the story internal to hacker news
-        top_story_uri = "https://news.ycombinator.com/item?id=" + str(top_story_id)
+        pass
 
     print(top_story_uri)
 
@@ -47,6 +68,19 @@ def sql_template_from_top_story(
 
     # save to postgres
     session.add(top_story_source_sql)
+    session.commit()
+
+    top_story_comments_sql = Source(
+        source="hacker-news-comments",
+        sourceMethod="http",
+        sourceUri="",
+        dataFormat="json",
+        content=top_story_comments,
+        externalId=top_story_id,
+    )
+
+    # save to postgres
+    session.add(top_story_comments_sql)
     session.commit()
 
     # get the page content

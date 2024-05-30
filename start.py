@@ -1,9 +1,14 @@
 from flask import Flask
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 from flask_restful import Api
 from sqlalchemy import desc
 from services.postgres import init_postgres, Source, Story
 from flask_restful import fields, marshal_with
+
+allowed_origins = [
+    "https://slacker-news-frontend.onrender.com",
+    "http://localhost*",
+]
 
 session = init_postgres()
 app = Flask(__name__)
@@ -11,7 +16,7 @@ api = Api(app)
 
 
 @app.route("/stories")
-@cross_origin()
+@cross_origin(origins=allowed_origins)
 @marshal_with(
     {
         "id": fields.String,
@@ -31,6 +36,7 @@ def get_stories():
 
 
 @app.route("/sources")
+@cross_origin(origins=allowed_origins)
 @marshal_with(
     {
         "id": fields.String,

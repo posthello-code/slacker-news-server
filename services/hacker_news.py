@@ -1,8 +1,7 @@
 from time import sleep
 import requests
 import json
-
-from services.postgres import Source, Story
+from models.data_models import Source, Story
 
 url_base = "https://hacker-news.firebaseio.com/v0"
 

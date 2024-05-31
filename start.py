@@ -2,7 +2,8 @@ from flask import Flask
 from flask_cors import cross_origin
 from flask_restful import Api
 from sqlalchemy import desc
-from services.postgres import init_postgres, Source, Story
+from services.postgres import init_postgres
+from models.data_models import Source, Story
 from flask_restful import fields, marshal_with
 
 allowed_origins = [

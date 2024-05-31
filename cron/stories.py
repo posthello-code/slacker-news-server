@@ -1,4 +1,5 @@
-from services.hacker_news import commit_source_data_to_db, Story
+from services.hacker_news import commit_source_data_to_db
+from models.data_models import Story
 from services.openai import doCompletionWithSystemMessage
 from services.postgres import init_postgres, close_session
 from services.utils import clean_html
@@ -11,7 +12,6 @@ story = commit_source_data_to_db(session)
 checkDuplicates = session.query(Story).where(Story.title == story.title).all()
 if len(checkDuplicates) == 0:
     story.summary = clean_html(story.summary)
-    print(story.summary)
     storySummary = doCompletionWithSystemMessage(
         story.summary,
         """You are a tech news and blog 

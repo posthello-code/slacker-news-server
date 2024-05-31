@@ -14,7 +14,8 @@ comment_sources = (
     .all()
 )
 
-latest_comments = json.dumps(comment_sources[0].content)
+latest_comments_obj = comment_sources[0]
+latest_comments = json.dumps(latest_comments_obj.content)
 
 print(latest_comments)
 text = optimizeTextForCompletion(latest_comments)
@@ -28,14 +29,14 @@ summary = doCompletionWithSystemMessage(
 print(summary)
 
 existing_comments = session.query(Comment).where(
-    Comment.sourceId == comment_sources[0].id
+    Comment.sourceId == latest_comments_obj.id
 )
 if len(existing_comments.all()) == 0:
-    session.add(Comment(summary=summary, sourceId=comment_sources[0].id))
+    session.add(Comment(summary=summary, sourceId=latest_comments_obj.id))
     session.commit()
 else:
     print("update existing")
-    session.query(Comment).where(Comment.sourceId == comment_sources[0].id).update(
+    session.query(Comment).where(Comment.sourceId == latest_comments_obj.id).update(
         {Comment.summary: summary}, synchronize_session=False
     )
     session.commit()

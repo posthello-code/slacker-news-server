@@ -6,7 +6,6 @@ from services.utils import clean_html
 
 session = init_postgres()
 
-print("getting story from hacker news")
 story = commit_source_data_to_db(session)
 
 checkDuplicates = session.query(Story).where(Story.title == story.title).all()
@@ -55,6 +54,7 @@ if len(checkDuplicates) == 0:
             title=story.title,
             summary=storySummary,
             sourceUri=story.sourceUri,
+            externalId=story.externalId,
         )
 
         session.add(storyStmt)

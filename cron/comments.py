@@ -21,7 +21,7 @@ text = optimizeTextForCompletion(latest_comments)
 summary = doCompletionWithSystemMessage(
     text,
     """You are being provided comment data for a hacker news article, summarize general sentiment. 
-    Provide a few interesting quotes.
+    Provide a few interesting quotesfrom the comments verbatim.
     Limit the length to 250 characters.
     Don't repeat yourself""",
 )

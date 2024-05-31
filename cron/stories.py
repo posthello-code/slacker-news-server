@@ -1,4 +1,4 @@
-from services.hacker_news import sql_template_from_top_story, Story
+from services.hacker_news import commit_source_data_to_db, Story
 from services.openai import doCompletionWithSystemMessage
 from services.postgres import init_postgres, close_session
 from services.utils import clean_html
@@ -6,14 +6,14 @@ from services.utils import clean_html
 session = init_postgres()
 
 print("getting story from hacker news")
-storySql = sql_template_from_top_story(session)
+story = commit_source_data_to_db(session)
 
-checkDuplicates = session.query(Story).where(Story.title == storySql.title).all()
+checkDuplicates = session.query(Story).where(Story.title == story.title).all()
 if len(checkDuplicates) == 0:
-    storySql.summary = clean_html(storySql.summary)
-    print(storySql.summary)
+    story.summary = clean_html(story.summary)
+    print(story.summary)
     storySummary = doCompletionWithSystemMessage(
-        storySql.summary,
+        story.summary,
         """You are a tech news and blog 
         summarizer. You will simplify technical jargon 
         so that the average technologist will 
@@ -51,10 +51,10 @@ if len(checkDuplicates) == 0:
 
     if len(storySummary) > 0:
         storyStmt = Story(
-            sourceId=storySql.sourceId,
-            title=storySql.title,
+            sourceId=story.sourceId,
+            title=story.title,
             summary=storySummary,
-            sourceUri=storySql.sourceUri,
+            sourceUri=story.sourceUri,
         )
 
         session.add(storyStmt)

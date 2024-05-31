@@ -4,32 +4,27 @@ import json
 
 from services.postgres import Source, Story
 
+url_base = "https://hacker-news.firebaseio.com/v0"
+
 
 def request_top_story():
-    response = requests.get(
-        "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
-    )
+    response = requests.get(f"{url_base}/topstories.json?print=pretty")
 
     top_stories = eval(response.text)
-    response = requests.get(
-        "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty"
-        % top_stories[0]
-    )
+    response = requests.get(f"{url_base}/item/{top_stories[0]}.json?print=pretty")
 
     return response
 
 
 def request_top_story_comments(id):
-    response = requests.get(
-        "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty" % id
-    )
+    response = requests.get(f"{url_base}/item/{id}.json?print=pretty")
 
     comment_ids = json.loads(response.text)["kids"]
     comments = []
     for item in comment_ids:
-        comment = requests.get(
-            "https://hacker-news.firebaseio.com/v0/item/% s.json?print=pretty" % item
-        )
+        comment = requests.get(f"{url_base}/item/{item}.json?print=pretty")
+        print(f"processing comment {item}")
+
         comments.append(json.loads(comment.text))
         sleep(0.2)
 
@@ -37,7 +32,7 @@ def request_top_story_comments(id):
 
 
 # Fetches the story,
-def sql_template_from_top_story(
+def commit_source_data_to_db(
     session,
 ):
     top_story_response = request_top_story()
@@ -70,10 +65,12 @@ def sql_template_from_top_story(
     session.add(top_story_source_sql)
     session.commit()
 
+    print(top_story_comments)
+
     top_story_comments_sql = Source(
-        source="hacker-news-comments",
+        source="hacker-news-comment",
         sourceMethod="http",
-        sourceUri="",
+        sourceUri=top_story_response.url,
         dataFormat="json",
         content=top_story_comments,
         externalId=top_story_id,

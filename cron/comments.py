@@ -16,14 +16,20 @@ comment_sources = (
 
 latest_comments_obj = comment_sources[0]
 latest_comments = json.dumps(latest_comments_obj.content)
-# print(latest_comments)
-text = optimizeTextForCompletion(latest_comments)
+text = optimizeTextForCompletion(
+    "Any quotes in your output should be verbatim, use the following data: "
+    + latest_comments
+)
 summary = doCompletionWithSystemMessage(
     text,
-    """You are being provided comment data for a hacker news article, summarize general sentiment. 
-    Provide a few interesting quotesfrom the comments verbatim.
+    """
+    You are a comment summarizer.
+    Describe the general sentiment of the conversation and
+    Provide a few interesting quotes from the provided comments verbatim.
     Limit the length to 250 characters.
-    Don't repeat yourself""",
+    Don't repeat yourself.
+    If there is nothing to summarize respond with the character '.'
+    """,
 )
 
 print(summary)

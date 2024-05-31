@@ -29,6 +29,7 @@ class Story(Base):
     title = Column(String, unique=False)
     summary = Column(Text, unique=False)
     sourceUri = Column(String, unique=False)
+    externalId = Column(Integer, unique=False)
 
 
 class Comment(Base):
@@ -39,3 +40,4 @@ class Comment(Base):
     createdDate = Column(DateTime, unique=False, server_default=text("NOW()"))
     sourceId = Column(UUID, unique=False)
     summary = Column(Text, unique=False, nullable=False)
+    externalId = Column(Integer, unique=False)

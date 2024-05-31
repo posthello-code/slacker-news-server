@@ -26,6 +26,7 @@ api = Api(app)
         "title": fields.String,
         "summary": fields.String,
         "sourceUri": fields.String,
+        "externalId": fields.Integer,
     }
 )
 def get_stories():
@@ -46,6 +47,7 @@ def get_stories():
         "sourceMethod": fields.String,
         "sourceUri": fields.String,
         "content": fields.String,
+        "externalId": fields.Integer,
     }
 )
 def get_sources():
@@ -61,6 +63,7 @@ def get_sources():
         "sourceId": fields.String,
         "createdDate": fields.String,
         "summary": fields.String,
+        "externalId": fields.Integer,
     }
 )
 def get_comments():

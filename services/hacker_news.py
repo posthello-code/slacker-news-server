@@ -106,4 +106,5 @@ def commit_source_data_to_db(
         title=top_story_title,
         summary=linked_site_source_sql.content,
         sourceUri=top_story_uri,
+        externalId=top_story_id,
     )

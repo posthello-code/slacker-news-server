@@ -40,4 +40,4 @@ class Comment(Base):
     createdDate = Column(DateTime, unique=False, server_default=text("NOW()"))
     sourceId = Column(UUID, unique=False)
     summary = Column(Text, unique=False, nullable=False)
-    externalId = Column(Integer, unique=False)
+    externalId = Column(Integer, unique=True)

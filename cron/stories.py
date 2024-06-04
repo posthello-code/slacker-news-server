@@ -3,7 +3,9 @@ from models.data_models import Story
 from services.openai import doCompletionWithSystemMessage
 from services.postgres import init_postgres, close_session
 from services.utils import clean_html
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 session = init_postgres()
 
 story = commit_source_data_to_db(session)

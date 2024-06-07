@@ -3,12 +3,11 @@ from sqlalchemy import (
     MetaData,
     create_engine,
 )
-from sqlalchemy.ext.declarative import declarative_base
 import os
 from dotenv import load_dotenv
 from sqlalchemy.orm import sessionmaker
 
-load_dotenv()
+load_dotenv(override=True)
 
 metadata_obj = MetaData()
 

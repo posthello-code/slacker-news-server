@@ -1,12 +1,14 @@
 from logging.config import fileConfig
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
 from alembic.config import Config
 
+load_dotenv(override=True)
 # Set the SQLAlchemy URL in the Alembic configuration
 
 # this is the Alembic Config object, which provides

@@ -1,8 +1,11 @@
 import os
 from time import sleep
 from openai import OpenAI
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 aiClient = OpenAI()
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL") or "gpt-4o"
 

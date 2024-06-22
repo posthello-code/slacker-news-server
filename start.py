@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask_cors import cross_origin
 from flask_restful import Api
@@ -9,15 +8,9 @@ from flask_restful import fields, marshal_with
 
 allowed_origins = [
     "https://slacker-news-frontend.onrender.com",
+    r"(https:\/\/slacker-news-frontend-pr-)[0-9]+.onrender.com",
     "http://localhost*",
 ]
-
-render_url = os.getenv("RENDER_EXTERNAL_URL")
-
-if render_url:
-    allowed_origins.append(render_url)
-    print(render_url)
-
 
 session = init_postgres()
 app = Flask(__name__)

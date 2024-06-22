@@ -6,7 +6,7 @@ databases:
     region: oregon
 services:
   - type: cron
-    name: slacker-news-stories
+    name: slacker-news-hn-ingest
     runtime: python
     repo: https://github.com/posthello-code/slacker-news-server
     plan: starter
@@ -14,19 +14,8 @@ services:
       - fromGroup: slacker-news
     region: oregon
     buildCommand: pip install -r requirements.txt
-    startCommand: python -m cron.stories
+    startCommand: python -m cron.stories && python -m cron.comments
     schedule: "0 */2 * * *"
-  - type: cron
-    name: slacker-news-comments
-    runtime: python
-    repo: https://github.com/posthello-code/slacker-news-server
-    plan: starter
-    envVars:
-      - fromGroup: slacker-news
-    region: oregon
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m cron.comments
-    schedule: "2 */2 * * *"
   - type: web
     name: slacker-news-server
     runtime: python

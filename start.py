@@ -16,6 +16,8 @@ render_url = os.getenv("RENDER_EXTERNAL_URL")
 
 if render_url:
     allowed_origins.append(render_url)
+    print(render_url)
+
 
 session = init_postgres()
 app = Flask(__name__)

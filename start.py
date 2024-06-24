@@ -8,6 +8,7 @@ from flask_restful import fields, marshal_with
 
 allowed_origins = [
     "https://slacker-news-frontend.onrender.com",
+    r"(https:\/\/slacker-news-frontend-pr-)[0-9]+.onrender.com",
     "http://localhost*",
 ]
 

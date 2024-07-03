@@ -15,7 +15,7 @@ services:
     region: oregon
     buildCommand: pip install -r requirements.txt
     startCommand: python -m cron.stories && python -m cron.comments
-    schedule: "0 */2 * * *"
+    schedule: "0 */3 * * *"
   - type: web
     name: slacker-news-server
     runtime: python

@@ -5,11 +5,12 @@ Backend for a news aggregator and summarizer
 Current features:
 
 - Hosted on render.com for simplicity sake
-- Render.com cron job calls `cron/stories.py` once per hour
-- Rewrites articles via with OpenAI gpt-3-turbo and saves them to a postgres database
-- A restful server can be run from `start.py` to serve stories out of the database
+- Render.com cron job calls `cron/stories.py` and `cron/comments.py` a few times a day (these run a single cron and too frequently in order to keep costs down for OpenAI usage)
+- Summarizes articles using with OpenAI chat completions and saves them to a postgres database
+- Flask server runs from `start.py` to serve stories out of the database
 
-Will be adding a front-end to go along with the project soon.
+Front-end [here](https://slacker-news-frontend.onrender.com/)
+Front-end repo [here](https://github.com/posthello-code/slacker-news-frontend)
 
 # Getting Started
 

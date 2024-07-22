@@ -14,14 +14,14 @@ comment_sources = (
     .all()
 )
 
-latest_comments_obj = comment_sources[0]
-latest_comments = json.dumps(latest_comments_obj.content)
-text = optimizeTextForCompletion(
+comments_from_latest_source = comment_sources[0]
+latest_comments_text = json.dumps(comments_from_latest_source.content)
+text_list = optimizeTextForCompletion(
     "Any quotes in your output should be verbatim, use the following data: "
-    + latest_comments
+    + latest_comments_text
 )
 summary = doCompletionWithSystemMessage(
-    text,
+    text_list,
     """
     You are a comment summarizer.
     Describe the general sentiment of the conversation and
@@ -35,22 +35,22 @@ summary = doCompletionWithSystemMessage(
 print(summary)
 
 existing_comments = session.query(Comment).where(
-    Comment.sourceId == latest_comments_obj.id
+    Comment.externalId == comments_from_latest_source.externalId
 )
 if len(existing_comments.all()) == 0:
     session.add(
         Comment(
             summary=summary,
-            sourceId=latest_comments_obj.id,
-            externalId=latest_comments_obj.externalId,
+            sourceId=comments_from_latest_source.id,
+            externalId=comments_from_latest_source.externalId,
         )
     )
     session.commit()
 else:
     print("update existing")
-    session.query(Comment).where(Comment.sourceId == latest_comments_obj.id).update(
-        {Comment.summary: summary}, synchronize_session=False
-    )
+    session.query(Comment).where(
+        Comment.externalId == comments_from_latest_source.externalId
+    ).update({Comment.summary: summary}, synchronize_session="auto")
     session.commit()
 
 close_session(session)

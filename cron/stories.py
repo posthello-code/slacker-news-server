@@ -20,7 +20,7 @@ if len(checkDuplicates) == 0:
         so that the average technologist will 
         understand. 
         
-        You will be proided text from a website, you 
+        You will be provided text from a website, you 
         need to explain what it contains.
         
         If the page appears to be a github repo, state

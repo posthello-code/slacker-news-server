@@ -17,6 +17,7 @@ class Source(Base):
     dataFormat = Column(String, unique=False)
     content = Column(Text, unique=False)
     externalId = Column(Integer, unique=False)
+    externalUuid = Column(String, unique=True, nullable=True)
 
 
 class Story(Base):
@@ -30,6 +31,7 @@ class Story(Base):
     summary = Column(Text, unique=False)
     sourceUri = Column(String, unique=False)
     externalId = Column(Integer, unique=False)
+    externalUuid = Column(String, unique=True, nullable=True)
 
 
 class Comment(Base):

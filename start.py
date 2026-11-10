@@ -1,10 +1,12 @@
+import os
+
 from flask import Flask
 from flask_cors import cross_origin
-from flask_restful import Api
+from flask_restful import Api, fields, marshal_with
 from sqlalchemy import desc
-from services.postgres import init_postgres
+
 from models.data_models import Comment, Source, Story
-from flask_restful import fields, marshal_with
+from services.postgres import init_postgres
 
 allowed_origins = [
     "https://slacker-news-frontend.onrender.com",
@@ -12,6 +14,9 @@ allowed_origins = [
     "https://studiologue.onrender.com",
     r"(https:\/\/studiologue-)[0-9]+.onrender.com",
 ]
+
+if os.environ.get("FLASK_ENV") == "development":
+    allowed_origins += ["http://localhost*", "http://127.0.0.1:3000"]
 
 session = init_postgres()
 app = Flask(__name__)
@@ -34,7 +39,8 @@ api = Api(app)
 def get_stories():
     try:
         items = session.query(Story).order_by(desc("createdDate")).all()
-    except:
+    except Exception as e:
+        print(e)
         session.rollback()
     return items
 
@@ -74,6 +80,7 @@ def get_comments():
 
 
 @app.route("/")
+@cross_origin(origins=allowed_origins)
 def root():
     return "OK"
 

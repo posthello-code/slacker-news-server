@@ -5,6 +5,7 @@ from sqlalchemy import desc
 from services.postgres import init_postgres
 from models.data_models import Comment, Source, Story
 from flask_restful import fields, marshal_with
+import os
 
 allowed_origins = [
     "https://slacker-news-frontend.onrender.com",
@@ -12,6 +13,9 @@ allowed_origins = [
     "https://studiologue.onrender.com",
     r"(https:\/\/studiologue-)[0-9]+.onrender.com",
 ]
+
+if os.environ.get("FLASK_ENV") == "development":
+    allowed_origins += ["http://localhost*", "http://127.0.0.1:3000"]
 
 session = init_postgres()
 app = Flask(__name__)
@@ -74,6 +78,7 @@ def get_comments():
 
 
 @app.route("/")
+@cross_origin(origins=allowed_origins)
 def root():
     return "OK"
 
